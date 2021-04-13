@@ -1,0 +1,188 @@
+#include <iostream>
+using namespace std;
+
+int n, m;
+int board[40][21];
+int player, choice;
+
+
+int main();
+void animation();
+void playerChoice();
+void result(int x, int c);
+bool check();
+size_t readHeight();
+size_t readWidth();
+
+
+int main()
+{
+    cout << "Welcome to connect the four!" << endl;
+    cout << "First you need to input the hight (between 4 and 20) and the width (between 4 and 40) of the table:" << endl;
+    n = readHeight();
+    m = readWidth();
+
+    cout << "Now enter the number corresponding with the colum that you want to put your mark in" << endl;
+    animation();
+    playerChoice();
+}
+
+
+size_t readHeight()
+{
+    size_t n;
+    do {
+        cout << "Enter the hight = ";
+        cin >> n;
+    } while (n < 4 || n > 20);
+    return n;
+}
+
+
+size_t readWidth()
+{
+    size_t m;
+    do {
+        cout << "Enter the width = ";
+        cin >> m;
+    } while (m < 4 || m > 40);
+    return m;
+}
+
+
+void animation() 
+{
+    cout << endl;
+    cout << "---" << 1;
+    for (int i = 2; i <= m; i++) 
+    {
+        cout << "----" << i;
+    }
+    cout << "---" << endl;
+    
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << "|";
+        for (int j = 0; j < m; j++)
+        {
+            if (board[i][j] != 0)
+            {
+                if (board[i][j] == 1)
+                {
+                    cout << "| X |";
+                }
+                else cout << "| O |";
+            }
+            else cout << "|   |";
+        } cout <<"|" << endl;
+    }
+    cout << endl;
+}
+
+
+void result(int x, int c)       //x = n / c = choice (width)
+{
+    if (board[x - 1][c - 1] != 0 && x > 0) 
+    {
+        x--;
+        result(x, choice);
+    }
+    else if (x == 0) 
+    {
+        cout << "No more space there!" << endl;
+        x = n;
+        player++;
+    }
+    else
+    {
+        if (player == 1)
+        {
+            board[x - 1][c - 1] = 1;
+        }
+        else 
+        {
+            board[x - 1][c - 1] = 2;
+        }
+        x = n;
+    }
+}
+
+
+void playerChoice()
+{
+    player = 1;
+    while (check() != true)
+    {
+        cout << "Enter your choice player " << player << ":";
+        cin >> choice;
+        if (choice > 0 && choice <= m)
+        {
+            result(n, choice);
+            animation();
+            if (player == 1)
+            {
+                player++;
+            }
+            else
+            {
+                player--;
+            }
+        }
+        else
+        {
+            cout << "Wrong choice!" << endl;
+        }
+        check();
+    }
+    cout << "The winner is player " << --player;
+}
+
+
+bool check() 
+{
+    for (int i = 0; i < n - 2; i++) 
+    {
+        for (int j = 0; j <= m; j++) 
+        {
+            if (board[i][j] != 0 && board[i][j] == board[i + 1][j] && board[i][j] == board[i + 2][j]
+                && board[i][j] == board[i + 3][j]) 
+            {
+                return true;
+            }
+        }
+    }
+    for (int i = 0; i <= n; i++)
+    {
+        for (int j = 0; j < m - 1; j++)
+        {
+            if (board[i][j] != 0 && board[i][j] == board[i][j + 1] && board[i][j] == board[i][j + 2]
+                && board[i][j] == board[i][j + 3])
+            {
+                return true;
+            }
+        }
+    }
+    for (int i = 0; i < n - 2; i++)
+    {
+        for (int j = 0; j < m - 1; j++)
+        {
+            if (board[i][j] != 0 && board[i][j] == board[i + 1][j + 1] && board[i][j] == board[i + 2][j + 2]
+                && board[i][j] == board[i + 3][j + 3])
+            {
+                return true;
+            }
+        }
+    }
+    for (int i = 3; i <= n; i++)
+    {
+        for (int j = 0; j < m -1; j++)
+        {
+            if (board[i][j] != 0 && board[i][j] == board[i - 1][j + 1] && board[i][j] == board[i - 2][j + 2]
+                && board[i][j] == board[i - 3][j + 3])
+            {
+                return true;
+            }
+        }
+    }
+}
