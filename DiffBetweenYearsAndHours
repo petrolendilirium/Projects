@@ -1,0 +1,78 @@
+#include <iostream>
+#include<iomanip>
+using namespace std;
+
+int main()
+{
+    int day, month, year, hours, min, sec;
+    int day2, month2, year2, hours2, min2, sec2;
+    char point, twopoints;
+    cout << "Input the first date in format d.m.y :";
+    cin >> day >> point >> month >> point >> year;
+    cout << "Input the first time in format h:m:s :";
+    cin >> hours >> twopoints >> min >> twopoints >> sec;
+    cout << "Input the second date in format d.m.y :";
+    cin >> day2 >> point >> month2 >> point >> year2;
+    cout << "Input the second time in format h:m:s :";
+    cin >> hours2 >> twopoints >> min2 >> twopoints >> sec2;
+
+    if (day == 29 && month == 2 || day2 == 29 && month2 == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || (year2 % 4 == 0 && year2 % 100 != 0)) {
+        }
+        else {
+            cout << "Invalid date" << endl;
+            return 0;
+        }
+    }
+
+    if ((day > 30 || day2 > 30) && (month == 4 || month == 6 || month == 9 || month == 11 || month2 == 4 || month2 == 6 || month2 == 9 || month2 == 11)) {
+        cout << "Invalid date" << endl;
+        return 0;
+    }
+    else if ((day > 29 || day2 > 29) && (month == 2|| month2 == 2)) {
+        cout << "Invalid date" << endl;
+        return 0;
+    }
+    else if ((day > 31 || day2 > 31) && (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12 || month2 == 1 || month2 == 3 || month2 == 5 || month2 == 7 || month2 == 8 || month2 == 10 || month2 == 12)) {
+        cout << "Invalid date" << endl;
+        return 0;
+    }
+
+    if ((min > 59 || min2 > 59 || sec > 59 || sec2 > 59) || (hours > 23 || hours2 > 23)) {
+        cout << "Invalid time" << endl;
+        return 0;
+    }
+
+    int intoSec = hours * 60 * 60 + min * 60 + sec;
+    int intoSec2 = hours2 * 60 * 60 + min2 * 60 + sec2;
+
+    int diffSec = abs(intoSec - intoSec2);
+    int diffHours = diffSec / 3600;
+    int diffMin = (diffSec - diffHours * 60) % 60;
+    if (diffMin >= 60) {
+        while (diffMin >= 60) {
+            diffMin = diffMin - 60;
+        }
+    }
+    diffSec = (diffSec - diffHours * 60) - diffMin * 60;
+    if (diffSec >= 60) {
+        while (diffSec >= 60) {
+            diffSec = diffSec - 60;
+        }
+    }
+
+
+    int intoDays = year * 365 + month * 30 + day;
+    int intoDays2 = year2 * 365 + month2 * 30 + day;
+    int diffDays = abs(intoDays - intoDays2);
+
+    if (diffDays == 0) {
+        cout.fill('0');
+        cout << "The difference is: " << setw(2) << diffHours << ":" << setw(2) << diffMin << ":" << setw(2) << diffSec << endl;
+    }
+    else {
+        cout.fill('0');
+        cout << "The difference is: " << diffDays << "days - " << setw(2) << diffHours << ":" << setw(2) << diffMin << ":" << setw(2) << diffSec << endl;
+    }
+
+}
